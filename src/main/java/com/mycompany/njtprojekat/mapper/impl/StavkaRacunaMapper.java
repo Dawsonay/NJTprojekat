@@ -12,45 +12,49 @@ import com.mycompany.njtprojekat.entity.impl.Racun;
 import com.mycompany.njtprojekat.entity.impl.StavkaRacuna;
 import com.mycompany.njtprojekat.entity.impl.Usluga;
 import com.mycompany.njtprojekat.mapper.DtoEntityMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StavkaRacunaMapper implements DtoEntityMapper<StavkaRacunaDto, StavkaRacuna>{
 
-    private final RacunMapper racunMapper = new RacunMapper();
-    private final UslugaMapper uslugaMapper = new UslugaMapper();
-
+     private final UslugaMapper uslugaMapper;
+    
+    @Autowired
+    public StavkaRacunaMapper(UslugaMapper uslugaMapper) {
+        this.uslugaMapper = uslugaMapper;
+    }
+    
     @Override
     public StavkaRacunaDto toDto(StavkaRacuna e) {
         if (e == null) {
             return null;
         }
-
-        RacunDto racunDto = e.getRacun() != null ? racunMapper.toDto(e.getRacun()) : null;
-        UslugaDto uslugaDto = e.getUsluga() != null ? uslugaMapper.toDto(e.getUsluga()) : null;
-
+        
+        // NE konvertuj ceo racun, samo postavi null ili samo ID
         return new StavkaRacunaDto(
                 e.getRb(),
-                racunDto,
+                null,  // racun ostavljamo null da izbegnemo circular dependency
                 e.getKolicina(),
                 e.getCena(),
                 e.getIznos(),
-                uslugaDto
+                e.getUsluga() != null ? uslugaMapper.toDto(e.getUsluga()) : null
         );
     }
-
+    
     @Override
     public StavkaRacuna toEntity(StavkaRacunaDto t) {
         if (t == null) {
             return null;
         }
-
+        
         Racun racun = t.getRacun() != null && t.getRacun().getIdRacun() != null
                 ? new Racun(t.getRacun().getIdRacun())
                 : null;
-
         Usluga usluga = t.getUsluga() != null && t.getUsluga().getIdUsluga() != null
-                ? new Usluga(t.getUsluga().getIdUsluga()) // prazan entitet samo sa ID-em
+                ? new Usluga(t.getUsluga().getIdUsluga())
                 : null;
-
+        
         StavkaRacuna stavka = new StavkaRacuna();
         stavka.setRb(t.getRb());
         stavka.setRacun(racun);
@@ -58,8 +62,7 @@ public class StavkaRacunaMapper implements DtoEntityMapper<StavkaRacunaDto, Stav
         stavka.setCena(t.getCena());
         stavka.setIznos(t.getIznos());
         stavka.setUsluga(usluga);
-
+        
         return stavka;
     }
-
 }

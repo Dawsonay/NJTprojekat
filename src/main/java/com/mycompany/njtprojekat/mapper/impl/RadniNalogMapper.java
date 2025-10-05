@@ -13,10 +13,20 @@ import com.mycompany.njtprojekat.entity.impl.StavkaRadnogNaloga;
 import com.mycompany.njtprojekat.mapper.DtoEntityMapper;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RadniNalogMapper implements DtoEntityMapper<RadniNalogDto, RadniNalog>{
-    private final StavkaRadnogNalogaMapper stavkaMapper = new StavkaRadnogNalogaMapper();
+    private final StavkaRadnogNalogaMapper stavkaMapper;
 
+    @Autowired
+    public RadniNalogMapper(StavkaRadnogNalogaMapper stavkaMapper) {
+        this.stavkaMapper = stavkaMapper;
+    }
+
+    
+    
     @Override
     public RadniNalogDto toDto(RadniNalog e) {
         if (e == null) return null;

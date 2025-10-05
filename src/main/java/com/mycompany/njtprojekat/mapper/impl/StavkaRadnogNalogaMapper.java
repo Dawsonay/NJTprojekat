@@ -11,7 +11,9 @@ import com.mycompany.njtprojekat.entity.impl.RadniNalog;
 import com.mycompany.njtprojekat.entity.impl.StavkaRadnogNaloga;
 import com.mycompany.njtprojekat.entity.impl.Usluga;
 import com.mycompany.njtprojekat.mapper.DtoEntityMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StavkaRadnogNalogaMapper implements DtoEntityMapper<StavkaRadnogNalogaDto, StavkaRadnogNaloga>{
     @Override
     public StavkaRadnogNalogaDto toDto(StavkaRadnogNaloga e) {

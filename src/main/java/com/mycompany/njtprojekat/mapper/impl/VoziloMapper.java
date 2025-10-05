@@ -10,7 +10,9 @@ import com.mycompany.njtprojekat.dto.impl.VrstaVozilaDto;
 import com.mycompany.njtprojekat.entity.impl.Vozilo;
 import com.mycompany.njtprojekat.entity.impl.VrstaVozila;
 import com.mycompany.njtprojekat.mapper.DtoEntityMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class VoziloMapper implements DtoEntityMapper<VoziloDto, Vozilo>{
 
      @Override

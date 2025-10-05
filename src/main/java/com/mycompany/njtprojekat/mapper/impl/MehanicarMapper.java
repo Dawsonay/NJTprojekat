@@ -7,7 +7,9 @@ package com.mycompany.njtprojekat.mapper.impl;
 import com.mycompany.njtprojekat.dto.impl.MehanicarDto;
 import com.mycompany.njtprojekat.entity.impl.Mehanicar;
 import com.mycompany.njtprojekat.mapper.DtoEntityMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MehanicarMapper implements DtoEntityMapper<MehanicarDto, Mehanicar> {
 
     @Override

@@ -8,7 +8,9 @@ package com.mycompany.njtprojekat.mapper.impl;
 import com.mycompany.njtprojekat.dto.impl.UslugaDto;
 import com.mycompany.njtprojekat.entity.impl.Usluga;
 import com.mycompany.njtprojekat.mapper.DtoEntityMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UslugaMapper implements DtoEntityMapper<UslugaDto, Usluga>{
 
      @Override
