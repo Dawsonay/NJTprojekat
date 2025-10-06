@@ -12,8 +12,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,7 +23,7 @@ public class Racun implements MyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idRacun;
-    private Date datum;
+    private LocalDate datum;
     private double ukupanIznos;
     @ManyToOne
     @JoinColumn(name = "mehanicar", nullable = false)
@@ -31,14 +31,14 @@ public class Racun implements MyEntity {
     @ManyToOne
     @JoinColumn(name = "vozilo", nullable = false)
     private Vozilo vozilo;
-    @OneToMany(mappedBy = "racun", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "racun", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StavkaRacuna> stavke;
 
     public Racun() {
         stavke = new ArrayList<>();
     }
 
-    public Racun(Integer idRacun, Date datum, double ukupanIznos, Mehanicar mehanicar, Vozilo vozilo) {
+    public Racun(Integer idRacun, LocalDate datum, double ukupanIznos, Mehanicar mehanicar, Vozilo vozilo) {
         this.idRacun = idRacun;
         this.datum = datum;
         this.ukupanIznos = ukupanIznos;
@@ -59,11 +59,11 @@ public class Racun implements MyEntity {
         this.idRacun = idRacun;
     }
 
-    public Date getDatum() {
+    public LocalDate getDatum() {
         return datum;
     }
 
-    public void setDatum(Date datum) {
+    public void setDatum(LocalDate datum) {
         this.datum = datum;
     }
 

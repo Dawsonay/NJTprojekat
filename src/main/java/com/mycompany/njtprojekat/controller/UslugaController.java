@@ -6,8 +6,9 @@
 package com.mycompany.njtprojekat.controller;
 
 import com.mycompany.njtprojekat.dto.impl.MehanicarDto;
-import com.mycompany.njtprojekat.dto.impl.VoziloDto;
-import com.mycompany.njtprojekat.servis.MehanicarServis;
+import com.mycompany.njtprojekat.dto.impl.UslugaDto;
+import com.mycompany.njtprojekat.dto.impl.UslugaDto;
+import com.mycompany.njtprojekat.servis.UslugaServis;
 import com.mycompany.njtprojekat.servis.VoziloServis;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,30 +30,30 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/api/vozilo")
-public class VoziloController {
-    private final VoziloServis voziloServis;
+@RequestMapping("/api/usluga")
+public class UslugaController {
+    private final UslugaServis servis;
 
-    public VoziloController(VoziloServis voziloServis) {
-        this.voziloServis = voziloServis;
+    public UslugaController(UslugaServis servis) {
+        this.servis = servis;
     }
     
     @GetMapping
-    @Operation(summary ="Retrieve all Servis entities. ")
+    @Operation(summary ="Retrieve all Usluga entities. ")
     @ApiResponse(responseCode = "200", content = {
-        @Content(schema = @Schema(implementation = VoziloDto.class), mediaType = "application/json")
+        @Content(schema = @Schema(implementation = UslugaDto.class), mediaType = "application/json")
     })
-    public ResponseEntity<List<VoziloDto>> getAll(){
-        return new ResponseEntity<>(voziloServis.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<UslugaDto>> getAll(){
+        return new ResponseEntity<>(servis.findAll(), HttpStatus.OK);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<VoziloDto> getById(
+    public ResponseEntity<UslugaDto> getById(
             @NotNull(message = "Ne bi trebao da bude null ili empty")
             @PathVariable(value="id") Integer id
     ){
         try{
-            return new ResponseEntity<>(voziloServis.findById(id), HttpStatus.OK);
+            return new ResponseEntity<>(servis.findById(id), HttpStatus.OK);
         }
         catch(Exception ex){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Nema toga");
@@ -60,28 +61,28 @@ public class VoziloController {
     }
     
     @PostMapping
-    @Operation(summary = "Create a new Vozilo entity")
-    @ApiResponse(responseCode = "201", description = "Vozilo successfully created",
+    @Operation(summary = "Create a new Usluga entity")
+    @ApiResponse(responseCode = "201", description = "Usluga successfully created",
             content = {
-                @Content(schema = @Schema(implementation = VoziloDto.class), mediaType = "application/json")})
+                @Content(schema = @Schema(implementation = UslugaDto.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400", description = "Invalid input data")
-    public ResponseEntity<VoziloDto> addVozilo(
-            @Valid @RequestBody VoziloDto voziloDto
+    public ResponseEntity<UslugaDto> addUsluga(
+            @Valid @RequestBody UslugaDto voziloDto
     ) {
         try {
-            VoziloDto saved = voziloServis.create(voziloDto);
+            UslugaDto saved = servis.create(voziloDto);
 
             return new ResponseEntity<>(saved, HttpStatus.CREATED);
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greška pri kreiranju vozila: " + ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greška pri kreiranju usluge: " + ex.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable(value = "id") Integer id) {
         try {
-            voziloServis.deleteById(id);
-            return new ResponseEntity<>("Vozilo uspesno obrisan",HttpStatus.OK );
+            servis.deleteById(id);
+            return new ResponseEntity<>("Usluga uspesno obrisana",HttpStatus.OK );
         } catch (Exception ex) {
             return new ResponseEntity<>("Ne postoji vozilo sa id: " + id ,HttpStatus.NOT_FOUND );
 
@@ -89,19 +90,19 @@ public class VoziloController {
     }
     
     @PutMapping("/{id}")
-    @Operation(summary = "Azuriranje postojeceg vozila")
+    @Operation(summary = "Azuriranje postojece usluge")
     @ApiResponse(responseCode = "200", content = {
-            @Content(schema = @Schema(implementation = VoziloDto.class), mediaType = "application/json")})
-    public ResponseEntity<VoziloDto> updateVozilo(
+            @Content(schema = @Schema(implementation = UslugaDto.class), mediaType = "application/json")})
+    public ResponseEntity<UslugaDto> updateUsluga(
             @PathVariable Integer id, 
-            @Valid @RequestBody VoziloDto voziloDto
+            @Valid @RequestBody UslugaDto uslugaDto
     ){
         try{
-            voziloDto.setIdVozilo(id);
-            VoziloDto updated = voziloServis.update(voziloDto);
+            uslugaDto.setIdUsluga(id);
+            UslugaDto updated = servis.update(uslugaDto);
             return new ResponseEntity<>(updated, HttpStatus.OK);
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Desila se greska prilikom update vozila");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Desila se greska prilikom update usluge");
         }
     }
 }

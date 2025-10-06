@@ -49,7 +49,7 @@ public class RadniNalogRepository implements MyAppRepository<RadniNalog, Integer
     public void deleteById(Integer id) {
         RadniNalog radniNalog = entityManager.find(RadniNalog.class, id);
         if(radniNalog!=null){
-            entityManager.remove(id);
+            entityManager.remove(radniNalog);
         }
     }
 

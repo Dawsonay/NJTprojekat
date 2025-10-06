@@ -42,13 +42,22 @@ public class UslugaRepository implements MyAppRepository<Usluga, Integer>{
             entityManager.merge(entity);
         }
     }
+    @Transactional
+    public Usluga saveU(Usluga entity) {
+        if (entity.getIdUsluga() == null) {
+            entityManager.persist(entity);
+            return entity;
+        } else {
+            return entityManager.merge(entity);
+        }
+    }
 
     @Override
     @Transactional
     public void deleteById(Integer id) {
         Usluga usluga = entityManager.find(Usluga.class, id);
         if(usluga!=null){
-            entityManager.remove(id);
+            entityManager.remove(usluga);
         }
     }
 

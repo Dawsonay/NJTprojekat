@@ -49,7 +49,7 @@ public class RacunRepository implements MyAppRepository<Racun, Integer>{
     public void deleteById(Integer id) {
         Racun racun = entityManager.find(Racun.class, id);
         if(racun!=null){
-            entityManager.remove(id);
+            entityManager.remove(racun);
         }
     }
 

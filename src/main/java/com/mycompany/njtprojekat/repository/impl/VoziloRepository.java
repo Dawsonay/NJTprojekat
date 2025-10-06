@@ -48,7 +48,7 @@ public class VoziloRepository implements MyAppRepository<Vozilo, Integer>{
     public void deleteById(Integer id) {
         Vozilo vozilo = entityManager.find(Vozilo.class, id);
         if(vozilo!=null){
-            entityManager.remove(id);
+            entityManager.remove(vozilo);
         }
     }
 

@@ -11,35 +11,35 @@ import jakarta.validation.constraints.*;
 
 
 public class StavkaRacunaDto implements Dto {
-    private Integer rb;
-    
-    @NotNull(message = "Stavka mora biti povezana sa racunom")
-    @Valid
-    private RacunDto racun;
-    
-    @Positive(message = "Kolicina mora biti veća od 0")
+     private Integer rb;
+
+    @NotNull(message = "Količina je obavezna")
+    @Positive(message = "Količina mora biti veća od 0")
     private Integer kolicina;
-    
+
+    @NotNull(message = "Cena je obavezna")
     @Positive(message = "Cena mora biti veća od 0")
     private double cena;
-    
+
     @PositiveOrZero(message = "Iznos ne sme biti negativan")
     private double iznos;
-    
+
     @NotNull(message = "Usluga je obavezna")
-    @Valid
-    private UslugaDto usluga;
+    private Integer idUsluga;
+    
+    
+    private Integer idRacun;
 
     public StavkaRacunaDto() {
     }
 
-    public StavkaRacunaDto(Integer rb, RacunDto racun, Integer kolicina, double cena, double iznos, UslugaDto usluga) {
+    public StavkaRacunaDto(Integer rb, Integer kolicina, double cena, double iznos, Integer idUsluga, Integer idRacun) {
         this.rb = rb;
-        this.racun = racun;
         this.kolicina = kolicina;
         this.cena = cena;
         this.iznos = iznos;
-        this.usluga = usluga;
+        this.idUsluga = idUsluga;
+        this.idRacun=idRacun;
     }
 
     public Integer getRb() {
@@ -48,14 +48,6 @@ public class StavkaRacunaDto implements Dto {
 
     public void setRb(Integer rb) {
         this.rb = rb;
-    }
-
-    public RacunDto getRacun() {
-        return racun;
-    }
-
-    public void setRacun(RacunDto racun) {
-        this.racun = racun;
     }
 
     public Integer getKolicina() {
@@ -82,13 +74,20 @@ public class StavkaRacunaDto implements Dto {
         this.iznos = iznos;
     }
 
-    public UslugaDto getUsluga() {
-        return usluga;
+    public Integer getIdUsluga() {
+        return idUsluga;
     }
 
-    public void setUsluga(UslugaDto usluga) {
-        this.usluga = usluga;
+    public void setIdUsluga(Integer idUsluga) {
+        this.idUsluga = idUsluga;
     }
-    
+
+    public Integer getIdRacun() {
+        return idRacun;
+    }
+
+    public void setIdRacun(Integer idRacun) {
+        this.idRacun = idRacun;
+    }
     
 }

@@ -11,6 +11,7 @@ import com.mycompany.njtprojekat.entity.impl.Racun;
 import com.mycompany.njtprojekat.entity.impl.StavkaRacuna;
 import com.mycompany.njtprojekat.entity.impl.Vozilo;
 import com.mycompany.njtprojekat.mapper.DtoEntityMapper;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,40 +20,71 @@ import org.springframework.stereotype.Component;
 @Component
 public class RacunMapper implements DtoEntityMapper<RacunDto, Racun> {
 
+    private final StavkaRacunaMapper stavkaMapper = new StavkaRacunaMapper();
+
     @Override
     public RacunDto toDto(Racun racun) {
         if (racun == null) {
             return null;
         }
-        
-        // NE konvertuj stavke ovde - to će raditi servis sloj ako treba
-        return new RacunDto(
-                racun.getIdRacun(),
-                racun.getDatum(),
-                racun.getUkupanIznos(),
-                racun.getMehanicar() != null ? racun.getMehanicar().getIdMehanicar() : null,
-                racun.getVozilo() != null ? racun.getVozilo().getIdVozilo() : null,
-                null  // stavke ostavljamo null ovde
-        );
+
+        RacunDto dto = new RacunDto();
+        dto.setIdRacun(racun.getIdRacun());
+        dto.setDatum(racun.getDatum());
+        dto.setUkupanIznos(racun.getUkupanIznos());
+
+        if (racun.getMehanicar() != null) {
+            dto.setIdMehanicar(racun.getMehanicar().getIdMehanicar());
+        }
+
+        if (racun.getVozilo() != null) {
+            dto.setIdVozilo(racun.getVozilo().getIdVozilo());
+        }
+
+        if (racun.getStavke() != null) {
+            List<StavkaRacunaDto> stavkeDto = racun.getStavke()
+                    .stream()
+                    .map(stavkaMapper::toDto)
+                    .collect(Collectors.toList());
+            dto.setStavke(stavkeDto);
+        }
+
+        return dto;
     }
-    
+
     @Override
     public Racun toEntity(RacunDto dto) {
         if (dto == null) {
             return null;
         }
-        
-        Mehanicar mehanicar = dto.getIdMehanicar() != null ? new Mehanicar(dto.getIdMehanicar()) : null;
-        Vozilo vozilo = dto.getIdVozilo() != null ? new Vozilo(dto.getIdVozilo()) : null;
-        
+
         Racun racun = new Racun();
         racun.setIdRacun(dto.getIdRacun());
         racun.setDatum(dto.getDatum());
         racun.setUkupanIznos(dto.getUkupanIznos());
-        racun.setMehanicar(mehanicar);
-        racun.setVozilo(vozilo);
+
         
+        Mehanicar mehanicar = new Mehanicar();
+        mehanicar.setIdMehanicar(dto.getIdMehanicar());
+        racun.setMehanicar(mehanicar);
+
+        Vozilo vozilo = new Vozilo();
+        vozilo.setIdVozilo(dto.getIdVozilo());
+        racun.setVozilo(vozilo);
+
+        if (dto.getStavke() != null) {
+            List<StavkaRacuna> stavke = dto.getStavke()
+                    .stream()
+                    .map(stavkaMapper::toEntity)
+                    .collect(Collectors.toList());
+            racun.setStavke(stavke);
+
+            // Postavi referencu na račune unutar svake stavke
+            for (StavkaRacuna s : stavke) {
+                s.setRacun(racun);
+            }
+        }
+
         return racun;
     }
 }
-

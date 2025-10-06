@@ -48,7 +48,7 @@ public class StavkaRacunaRepository implements MyAppRepository<StavkaRacuna, Int
     public void deleteById(Integer id) {
         StavkaRacuna stavkaRacuna = entityManager.find(StavkaRacuna.class, id);
         if(stavkaRacuna!=null){
-            entityManager.remove(id);
+            entityManager.remove(stavkaRacuna);
         }
     }
 

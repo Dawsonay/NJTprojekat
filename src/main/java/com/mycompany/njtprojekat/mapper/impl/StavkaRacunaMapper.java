@@ -2,12 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package com.mycompany.njtprojekat.mapper.impl;
 
-import com.mycompany.njtprojekat.dto.impl.RacunDto;
 import com.mycompany.njtprojekat.dto.impl.StavkaRacunaDto;
-import com.mycompany.njtprojekat.dto.impl.UslugaDto;
 import com.mycompany.njtprojekat.entity.impl.Racun;
 import com.mycompany.njtprojekat.entity.impl.StavkaRacuna;
 import com.mycompany.njtprojekat.entity.impl.Usluga;
@@ -16,53 +13,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StavkaRacunaMapper implements DtoEntityMapper<StavkaRacunaDto, StavkaRacuna>{
+public class StavkaRacunaMapper implements DtoEntityMapper<StavkaRacunaDto, StavkaRacuna> {
 
-     private final UslugaMapper uslugaMapper;
-    
-    @Autowired
-    public StavkaRacunaMapper(UslugaMapper uslugaMapper) {
-        this.uslugaMapper = uslugaMapper;
-    }
-    
     @Override
-    public StavkaRacunaDto toDto(StavkaRacuna e) {
-        if (e == null) {
+    public StavkaRacunaDto toDto(StavkaRacuna entity) {
+        if (entity == null) {
             return null;
         }
-        
-        // NE konvertuj ceo racun, samo postavi null ili samo ID
-        return new StavkaRacunaDto(
-                e.getRb(),
-                null,  // racun ostavljamo null da izbegnemo circular dependency
-                e.getKolicina(),
-                e.getCena(),
-                e.getIznos(),
-                e.getUsluga() != null ? uslugaMapper.toDto(e.getUsluga()) : null
-        );
+
+        StavkaRacunaDto dto = new StavkaRacunaDto();
+        dto.setRb(entity.getRb());
+        dto.setKolicina(entity.getKolicina());
+        dto.setCena(entity.getCena());
+        dto.setIznos(entity.getIznos());
+        dto.setIdRacun(entity.getRacun().getIdRacun());
+
+        if (entity.getUsluga() != null) {
+            dto.setIdUsluga(entity.getUsluga().getIdUsluga());
+        }
+
+        return dto;
     }
-    
+
     @Override
-    public StavkaRacuna toEntity(StavkaRacunaDto t) {
-        if (t == null) {
+    public StavkaRacuna toEntity(StavkaRacunaDto dto) {
+        if (dto == null) {
             return null;
         }
-        
-        Racun racun = t.getRacun() != null && t.getRacun().getIdRacun() != null
-                ? new Racun(t.getRacun().getIdRacun())
-                : null;
-        Usluga usluga = t.getUsluga() != null && t.getUsluga().getIdUsluga() != null
-                ? new Usluga(t.getUsluga().getIdUsluga())
-                : null;
-        
-        StavkaRacuna stavka = new StavkaRacuna();
-        stavka.setRb(t.getRb());
-        stavka.setRacun(racun);
-        stavka.setKolicina(t.getKolicina());
-        stavka.setCena(t.getCena());
-        stavka.setIznos(t.getIznos());
-        stavka.setUsluga(usluga);
-        
-        return stavka;
+
+        StavkaRacuna entity = new StavkaRacuna();
+        entity.setRb(dto.getRb());
+        entity.setKolicina(dto.getKolicina());
+        entity.setCena(dto.getCena());
+        entity.setIznos(dto.getIznos());
+//        entity.setRacun(dto.getIdRacun());
+        if (dto.getIdUsluga() != null) {
+            Usluga usluga = new Usluga();
+            usluga.setIdUsluga(dto.getIdUsluga());
+            entity.setUsluga(usluga);
+        }
+
+        return entity;
     }
+
 }

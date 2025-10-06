@@ -48,7 +48,7 @@ public class VrstaVozilaRepository implements MyAppRepository<VrstaVozila, Integ
     public void deleteById(Integer id) {
         VrstaVozila vrstaVozila = entityManager.find(VrstaVozila.class, id);
         if(vrstaVozila!=null){
-            entityManager.remove(id);
+            entityManager.remove(vrstaVozila);
         }
     }
 
