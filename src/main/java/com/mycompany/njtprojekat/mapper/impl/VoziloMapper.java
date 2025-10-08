@@ -38,7 +38,7 @@ public class VoziloMapper implements DtoEntityMapper<VoziloDto, Vozilo>{
                 e.getRegistarskiBroj(),
                 e.getTipGoriva(),
                 e.getGodiste(),
-                vrstaDto
+                vrstaDto.getIdVrsta()
         );
     }
 
@@ -48,8 +48,8 @@ public class VoziloMapper implements DtoEntityMapper<VoziloDto, Vozilo>{
             return null;
         }
 
-        VrstaVozila vrsta = t.getVrsta() != null && t.getVrsta().getIdVrsta() != null
-                ? new VrstaVozila(t.getVrsta().getIdVrsta())
+        VrstaVozila vrsta = t.getIdVrsta() != null
+                ? new VrstaVozila(t.getIdVrsta())
                 : null;
 
         Vozilo vozilo = new Vozilo();

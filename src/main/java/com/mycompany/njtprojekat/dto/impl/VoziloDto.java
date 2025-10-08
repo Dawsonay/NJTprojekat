@@ -38,19 +38,19 @@ public class VoziloDto implements Dto{
     
     @NotNull(message = "Vrsta vozila je obavezna")
     @Valid
-    private VrstaVozilaDto vrsta;
+    private Integer idVrsta;
 
     public VoziloDto() {
     }
 
-    public VoziloDto(Integer idVozilo, String brojSasije, String model, String registarskiBroj, String tipGoriva, Integer godiste, VrstaVozilaDto vrsta) {
+    public VoziloDto(Integer idVozilo, String brojSasije, String model, String registarskiBroj, String tipGoriva, Integer godiste, Integer vrsta) {
         this.idVozilo = idVozilo;
         this.brojSasije = brojSasije;
         this.model = model;
         this.registarskiBroj = registarskiBroj;
         this.tipGoriva = tipGoriva;
         this.godiste = godiste;
-        this.vrsta = vrsta;
+        this.idVrsta = vrsta;
     }
 
     public Integer getIdVozilo() {
@@ -101,12 +101,12 @@ public class VoziloDto implements Dto{
         this.godiste = godiste;
     }
 
-    public VrstaVozilaDto getVrsta() {
-        return vrsta;
+    public Integer getIdVrsta() {
+        return idVrsta;
     }
 
-    public void setVrsta(VrstaVozilaDto vrsta) {
-        this.vrsta = vrsta;
+    public void setIdVrsta(Integer vrsta) {
+        this.idVrsta = vrsta;
     }
     
 }

@@ -2,18 +2,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package com.mycompany.njtprojekat.entity.impl;
 
 import jakarta.persistence.*;
 import com.mycompany.njtprojekat.entity.MyEntity;
+import java.util.Collection;
+import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 // @OneToMany(mappedBy="restaurant", cascade=CascadeType.ALL)
-
 @Entity
-@Table(name="mehanicar")
-public class Mehanicar implements MyEntity{
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Table(name = "mehanicar",
+        uniqueConstraints = {
+            @UniqueConstraint(name = "uk_mehanicar_username", columnNames = "username")})
+public class Mehanicar implements MyEntity, UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMehanicar;
     private String ime;
     private String prezime;
@@ -74,6 +81,30 @@ public class Mehanicar implements MyEntity{
     public void setPassword(String password) {
         this.password = password;
     }
-    
-   
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_MEHANICAR")); 
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // Uvek true, osim ako nemate logiku za isticanje naloga
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // Uvek true, osim ako nemate logiku za zaključavanje naloga
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // Uvek true, osim ako nemate logiku za isticanje šifre
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // Uvek true, osim ako nemate logiku za privremeno gašenje naloga
+    }
+
 }

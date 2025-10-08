@@ -1,0 +1,37 @@
+package com.mycompany.njtprojekat.servis;
+
+import com.mycompany.njtprojekat.entity.impl.Mehanicar;
+import com.mycompany.njtprojekat.repository.impl.MehanicarRepository;
+import java.util.Collections;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MehanicarUserDetailsService implements UserDetailsService {
+
+    private final MehanicarRepository mehanicarRepository;
+
+    public MehanicarUserDetailsService(MehanicarRepository mehanicarRepository) {
+        this.mehanicarRepository = mehanicarRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Oslanjamo se na Repozitorijum da vrati null ako nema korisnika
+        Mehanicar mehanicar = mehanicarRepository.findByUsername(username);
+
+        // Ova provera je ispravna, jer Repozitorijum vraća null.
+        if (mehanicar == null) {
+            throw new UsernameNotFoundException("Mehanicar sa korisničkim imenom: " + username + " nije pronađen!");
+        }
+
+        return new org.springframework.security.core.userdetails.User(
+                mehanicar.getUsername(),
+                mehanicar.getPassword(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_MEHANICAR"))
+        );
+    }
+}
