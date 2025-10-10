@@ -5,41 +5,31 @@
 package com.mycompany.njtprojekat.dto.impl;
 
 import com.mycompany.njtprojekat.dto.Dto;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-
-
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 public class StavkaRacunaDto implements Dto {
-     private Integer rb;
 
-    @NotNull(message = "Količina je obavezna")
-    @Positive(message = "Količina mora biti veća od 0")
-    private Integer kolicina;
+    private Integer rb;
 
-    @NotNull(message = "Cena je obavezna")
-    @Positive(message = "Cena mora biti veća od 0")
+    @NotNull(message = "cena je obavezna")
     private double cena;
-
-    @PositiveOrZero(message = "Iznos ne sme biti negativan")
+    @NotNull(message = "iznos je obavezan")
     private double iznos;
-
-    @NotNull(message = "Usluga je obavezna")
+    @Min(value=1,message = "kolicina mora biti bar 1")
+    private int kolicina;
+    @NotNull(message = "usluga je obavezna")
     private Integer idUsluga;
-    
-    
-    private Integer idRacun;
 
     public StavkaRacunaDto() {
     }
 
-    public StavkaRacunaDto(Integer rb, Integer kolicina, double cena, double iznos, Integer idUsluga, Integer idRacun) {
+    public StavkaRacunaDto(Integer rb, double cena, double iznos, int kolicina, Integer idUsluga) {
         this.rb = rb;
-        this.kolicina = kolicina;
         this.cena = cena;
         this.iznos = iznos;
+        this.kolicina = kolicina;
         this.idUsluga = idUsluga;
-        this.idRacun=idRacun;
     }
 
     public Integer getRb() {
@@ -48,14 +38,6 @@ public class StavkaRacunaDto implements Dto {
 
     public void setRb(Integer rb) {
         this.rb = rb;
-    }
-
-    public Integer getKolicina() {
-        return kolicina;
-    }
-
-    public void setKolicina(Integer kolicina) {
-        this.kolicina = kolicina;
     }
 
     public double getCena() {
@@ -74,6 +56,14 @@ public class StavkaRacunaDto implements Dto {
         this.iznos = iznos;
     }
 
+    public int getKolicina() {
+        return kolicina;
+    }
+
+    public void setKolicina(int kolicina) {
+        this.kolicina = kolicina;
+    }
+
     public Integer getIdUsluga() {
         return idUsluga;
     }
@@ -82,12 +72,5 @@ public class StavkaRacunaDto implements Dto {
         this.idUsluga = idUsluga;
     }
 
-    public Integer getIdRacun() {
-        return idRacun;
-    }
-
-    public void setIdRacun(Integer idRacun) {
-        this.idRacun = idRacun;
-    }
-    
+   
 }

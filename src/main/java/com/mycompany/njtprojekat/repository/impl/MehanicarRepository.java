@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.njtprojekat.repository.impl;
 
 import com.mycompany.njtprojekat.entity.impl.Mehanicar;
@@ -20,14 +16,15 @@ public class MehanicarRepository implements MyAppRepository<Mehanicar, Integer> 
 
     @Override
     public List<Mehanicar> findAll() {
-        return entityManager.createQuery("Select m from Mehanicar m", Mehanicar.class).getResultList();
+        return entityManager.createQuery("SELECT m FROM Mehanicar m", Mehanicar.class)
+                .getResultList();
     }
 
     @Override
     public Mehanicar findById(Integer id) throws Exception {
         Mehanicar mehanicar = entityManager.find(Mehanicar.class, id);
         if (mehanicar == null) {
-            throw new Exception("Mehanicar nije pronadjen!");
+            throw new Exception("Mehaničar nije pronađen!");
         }
         return mehanicar;
     }
@@ -53,17 +50,21 @@ public class MehanicarRepository implements MyAppRepository<Mehanicar, Integer> 
 
     @Transactional
     public Mehanicar findByUsername(String username) {
-        List<Mehanicar> list = entityManager.createQuery("Select u from Mehanicar u where u.username=:un", Mehanicar.class)
-                .setParameter("un", username).getResultList();
+        List<Mehanicar> list = entityManager.createQuery(
+                        "SELECT u FROM Mehanicar u WHERE u.username = :un",
+                        Mehanicar.class)
+                .setParameter("un", username)
+                .getResultList();
         return list.isEmpty() ? null : list.get(0);
     }
 
     @Transactional
-    public boolean existsByUsnerame(String username) {
-        Integer c = entityManager.createQuery("Select count(u) from Mehanicar u where u.username=:un", Integer.class)
-                .setParameter("un", username).getSingleResult();
-        return c > 0;
-
+    public boolean existsByUsername(String username) {
+        Long count = entityManager.createQuery(
+                        "SELECT COUNT(u) FROM Mehanicar u WHERE u.username = :un",
+                        Long.class)
+                .setParameter("un", username)
+                .getSingleResult();
+        return count > 0;
     }
-
 }

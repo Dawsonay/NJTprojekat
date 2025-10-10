@@ -20,12 +20,10 @@ public class MehanicarUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Oslanjamo se na Repozitorijum da vrati null ako nema korisnika
         Mehanicar mehanicar = mehanicarRepository.findByUsername(username);
 
-        // Ova provera je ispravna, jer Repozitorijum vraća null.
         if (mehanicar == null) {
-            throw new UsernameNotFoundException("Mehanicar sa korisničkim imenom: " + username + " nije pronađen!");
+            throw new UsernameNotFoundException("Mehaničar sa korisničkim imenom " + username + " nije pronađen.");
         }
 
         return new org.springframework.security.core.userdetails.User(

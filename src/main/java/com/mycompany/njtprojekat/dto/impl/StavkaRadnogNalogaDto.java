@@ -18,12 +18,8 @@ import jakarta.validation.constraints.*;
 public class StavkaRadnogNalogaDto implements Dto{
     private Integer rb;
     
-    @NotNull(message = "Stavka mora biti povezana sa radnim nalogom")
-    @Valid
-    private RadniNalogDto radniNalog;
-    
     @Positive(message = "Količina mora biti veća od 0")
-    private Integer kolicina;
+    private int kolicina;
     
     @Positive(message = "Cena po jedinici mora biti veća od 0")
     private double cenaPoJedinici;
@@ -35,21 +31,19 @@ public class StavkaRadnogNalogaDto implements Dto{
     @Size(min = 5, max = 300, message = "Opis zadatka mora imati između 5 i 300 karaktera")
     private String opisZadatka;
     
-    @NotNull(message = "Usluga je obavezna")
-    @Valid
-    private UslugaDto usluga;
+    @NotNull(message = "usluga je obavezna")
+    private Integer idUsluga;
 
     public StavkaRadnogNalogaDto() {
     }
 
-    public StavkaRadnogNalogaDto(Integer rb, RadniNalogDto radniNalog, Integer kolicina, double cenaPoJedinici, double ukupnaCena, String opisZadatka,UslugaDto usluga) {
+    public StavkaRadnogNalogaDto(Integer rb, int kolicina, double cenaPoJedinici, double ukupnaCena, String opisZadatka, Integer idUsluga) {
         this.rb = rb;
-        this.radniNalog = radniNalog;
         this.kolicina = kolicina;
         this.cenaPoJedinici = cenaPoJedinici;
         this.ukupnaCena = ukupnaCena;
-        this.opisZadatka=opisZadatka;
-        this.usluga = usluga;
+        this.opisZadatka = opisZadatka;
+        this.idUsluga = idUsluga;
     }
 
     public Integer getRb() {
@@ -60,19 +54,11 @@ public class StavkaRadnogNalogaDto implements Dto{
         this.rb = rb;
     }
 
-    public RadniNalogDto getRadniNalog() {
-        return radniNalog;
-    }
-
-    public void setRadniNalog(RadniNalogDto radniNalog) {
-        this.radniNalog = radniNalog;
-    }
-
-    public Integer getKolicina() {
+    public int getKolicina() {
         return kolicina;
     }
 
-    public void setKolicina(Integer kolicina) {
+    public void setKolicina(int kolicina) {
         this.kolicina = kolicina;
     }
 
@@ -92,14 +78,6 @@ public class StavkaRadnogNalogaDto implements Dto{
         this.ukupnaCena = ukupnaCena;
     }
 
-    public UslugaDto getUsluga() {
-        return usluga;
-    }
-
-    public void setUsluga(UslugaDto usluga) {
-        this.usluga = usluga;
-    }
-
     public String getOpisZadatka() {
         return opisZadatka;
     }
@@ -107,5 +85,21 @@ public class StavkaRadnogNalogaDto implements Dto{
     public void setOpisZadatka(String opisZadatka) {
         this.opisZadatka = opisZadatka;
     }
+
+    public Integer getIdUsluga() {
+        return idUsluga;
+    }
+
+    public void setIdUsluga(Integer idUsluga) {
+        this.idUsluga = idUsluga;
+    }
+
+    
+
+    
+
+    
+
+    
     
 }

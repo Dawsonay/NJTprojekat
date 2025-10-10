@@ -1,11 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.njtprojekat.controller;
 
 import com.mycompany.njtprojekat.dto.impl.MehanicarDto;
+import com.mycompany.njtprojekat.dto.impl.MehanicarUpdateResponse;
 import com.mycompany.njtprojekat.servis.MehanicarServis;
+import com.mycompany.njtprojekat.security.jwt.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +13,8 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,76 +32,98 @@ import org.springframework.web.server.ResponseStatusException;
 public class MehanicarController {
 
     private final MehanicarServis mehanicarServis;
+    private final JwtUtil jwtUtil;
+    private final UserDetailsService mehanicarUserDetailsService;
 
-    public MehanicarController(MehanicarServis mehanicarServis) {
+    public MehanicarController(
+            MehanicarServis mehanicarServis,
+            JwtUtil jwtUtil,
+            UserDetailsService mehanicarUserDetailsService
+    ) {
         this.mehanicarServis = mehanicarServis;
+        this.jwtUtil = jwtUtil;
+        this.mehanicarUserDetailsService = mehanicarUserDetailsService;
     }
 
+    // =================== GET ALL ===================
     @GetMapping
-    @Operation(summary = "Retrieve all Mehanicar entities. ")
+    @Operation(summary = "Prikazuje sve mehaničare")
     @ApiResponse(responseCode = "200", content = {
         @Content(schema = @Schema(implementation = MehanicarDto.class), mediaType = "application/json")
     })
     public ResponseEntity<List<MehanicarDto>> getAll() {
-        return new ResponseEntity<>(mehanicarServis.findAll(), HttpStatus.OK);
+        return ResponseEntity.ok(mehanicarServis.findAll());
     }
 
+    // =================== GET BY ID ===================
     @GetMapping("/{id}")
     public ResponseEntity<MehanicarDto> getById(
-            @NotNull(message = "Ne bi trebao da bude null ili empty")
-            @PathVariable(value = "id") Integer id
+            @NotNull(message = "ID ne sme biti null") @PathVariable Integer id
     ) {
         try {
-            return new ResponseEntity<>(mehanicarServis.findById(id), HttpStatus.OK);
+            return ResponseEntity.ok(mehanicarServis.findById(id));
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greska pri trazenju mehanicara");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Mehaničar nije pronađen.");
         }
     }
 
+    // =================== CREATE ===================
     @PostMapping
-    @Operation(summary = "Create a new Mehanicar entity")
-    @ApiResponse(responseCode = "201", description = "Mehanicar successfully created",
-            content = {
-                @Content(schema = @Schema(implementation = MehanicarDto.class), mediaType = "application/json")})
-    @ApiResponse(responseCode = "400", description = "Invalid input data")
-    public ResponseEntity<MehanicarDto> addMehanicar(
-            @Valid @RequestBody MehanicarDto mehanicarDto
-    ) {
+    @Operation(summary = "Kreira novog mehaničara")
+    @ApiResponse(responseCode = "201", description = "Mehaničar uspešno kreiran",
+            content = @Content(schema = @Schema(implementation = MehanicarDto.class)))
+    public ResponseEntity<MehanicarDto> addMehanicar(@Valid @RequestBody MehanicarDto mehanicarDto) {
         try {
             MehanicarDto saved = mehanicarServis.create(mehanicarDto);
-
             return new ResponseEntity<>(saved, HttpStatus.CREATED);
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greška pri kreiranju mehaničara: " + ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greška pri kreiranju: " + ex.getMessage());
         }
     }
 
+    // =================== DELETE ===================
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable(value = "id") Integer id) {
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
         try {
             mehanicarServis.deleteById(id);
-            return new ResponseEntity<>("Mehanicar uspesno obrisan",HttpStatus.OK );
+            return ResponseEntity.ok("Mehaničar uspešno obrisan.");
         } catch (Exception ex) {
-            return new ResponseEntity<>("Ne postoji mehanicar sa id: " + id ,HttpStatus.NOT_FOUND );
+            return new ResponseEntity<>("Ne postoji mehaničar sa ID: " + id, HttpStatus.NOT_FOUND);
+        }
+    }
 
-        }
-    }
-    
+    // =================== UPDATE ===================
     @PutMapping("/{id}")
-    @Operation(summary = "Azuriranje postojeceg mehanicara")
+    @Operation(summary = "Ažurira postojeću evidenciju mehaničara")
     @ApiResponse(responseCode = "200", content = {
-            @Content(schema = @Schema(implementation = MehanicarDto.class), mediaType = "application/json")})
-    public ResponseEntity<MehanicarDto> updateMehanicar(
-            @PathVariable Integer id, 
+        @Content(schema = @Schema(implementation = MehanicarUpdateResponse.class), mediaType = "application/json")
+    })
+    public ResponseEntity<MehanicarUpdateResponse> updateMehanicar(
+            @PathVariable Integer id,
             @Valid @RequestBody MehanicarDto mehanicarDto
-    ){
-        try{
+    ) {
+        try {
             mehanicarDto.setIdMehanicar(id);
+
+            // ✅ Ažuriraj mehaničara
             MehanicarDto updated = mehanicarServis.update(mehanicarDto);
-            return new ResponseEntity<>(updated, HttpStatus.OK);
+
+            String token = null;
+
+            // ✅ Ako je poslat novi password, generiši novi token
+            if (mehanicarDto.getPassword() != null && !mehanicarDto.getPassword().isBlank()) {
+                UserDetails userDetails = mehanicarUserDetailsService.loadUserByUsername(updated.getUsername());
+                token = jwtUtil.generateToken(userDetails);
+            }
+
+            MehanicarUpdateResponse response = new MehanicarUpdateResponse(updated, token);
+            return ResponseEntity.ok(response);
+
+        } catch (ResponseStatusException e) {
+            throw e; // proslijedi ako već ima status
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Desila se greska prilikom update mehanicara");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Greška prilikom ažuriranja: " + ex.getMessage());
         }
     }
-    
 }

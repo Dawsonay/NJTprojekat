@@ -5,33 +5,29 @@
 package com.mycompany.njtprojekat.dto.impl;
 
 import com.mycompany.njtprojekat.dto.Dto;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 
 public class MehanicarDto implements Dto {
-    
+
     private Integer idMehanicar;
-    
+
     @NotBlank(message = "Ime je obavezno")
     @Size(min = 2, max = 30, message = "Ime mora imati izmedju 2 i 30 karaktera")
     private String ime;
-    
+
     @NotBlank(message = "Prezime je obavezno")
     @Size(min = 2, max = 30, message = "Prezime mora imati izmedju 2 i 30 karaktera")
     private String prezime;
-    
+
     @NotBlank(message = "Korisnicko ime je obavezno")
     @Size(min = 4, max = 20, message = "Korisnicko ime mora imati izmedju 4 i 20 karaktera")
     private String username;
-    
-    @NotBlank(message = "Lozinka je obavezna")
+
+    // ⚙️ Više nije obavezno polje — može biti null ili prazan string ako se ne menja
     @Size(min = 8, max = 100, message = "Lozinka mora imati najmanje 8 karaktera")
     private String password;
 
-    public MehanicarDto() {
-    }
+    public MehanicarDto() {}
 
     public MehanicarDto(Integer idMehanicar, String ime, String prezime, String username, String password) {
         this.idMehanicar = idMehanicar;

@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package com.mycompany.njtprojekat.mapper.impl;
 
 import com.mycompany.njtprojekat.dto.Dto;
@@ -14,47 +13,31 @@ import com.mycompany.njtprojekat.mapper.DtoEntityMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StavkaRadnogNalogaMapper implements DtoEntityMapper<StavkaRadnogNalogaDto, StavkaRadnogNaloga>{
+public class StavkaRadnogNalogaMapper implements DtoEntityMapper<StavkaRadnogNalogaDto, StavkaRadnogNaloga> {
+
     @Override
     public StavkaRadnogNalogaDto toDto(StavkaRadnogNaloga e) {
-        if (e == null) return null;
-
         return new StavkaRadnogNalogaDto(
                 e.getRb(),
-                null,
                 e.getKolicina(),
                 e.getCenaPoJedinici(),
                 e.getUkupnaCena(),
                 e.getOpisZadatka(),
-                e.getUsluga() != null ? new com.mycompany.njtprojekat.dto.impl.UslugaDto(
-                        e.getUsluga().getIdUsluga(),
-                        e.getUsluga().getNaziv(),
-                        e.getUsluga().getOpis(),
-                        e.getUsluga().getCena()
-                ) : null
+                e.getUsluga().getIdUsluga()
         );
     }
 
     @Override
     public StavkaRadnogNaloga toEntity(StavkaRadnogNalogaDto t) {
-        if (t == null) return null;
+        StavkaRadnogNaloga oi = new StavkaRadnogNaloga();
+        oi.setRb(t.getRb());
+        oi.setKolicina(t.getKolicina());
+        oi.setCenaPoJedinici(t.getCenaPoJedinici());
+        oi.setUkupnaCena(t.getUkupnaCena());
+        oi.setOpisZadatka(t.getOpisZadatka());
 
-        RadniNalog radniNalog = t.getRadniNalog() != null && t.getRadniNalog().getIdRadniNalog() != null
-                ? new RadniNalog(t.getRadniNalog().getIdRadniNalog(), null, null, null, null, null, null)
-                : null;
-
-        Usluga usluga = t.getUsluga() != null && t.getUsluga().getIdUsluga() != null
-                ? new Usluga(t.getUsluga().getIdUsluga())
-                : null;
-
-        return new StavkaRadnogNaloga(
-                t.getRb(),
-                radniNalog,
-                t.getKolicina(),
-                t.getCenaPoJedinici(),
-                t.getUkupnaCena(),
-                t.getOpisZadatka(),
-                usluga
-        );
+        oi.setUsluga(new Usluga(t.getIdUsluga()));
+        return oi;
     }
+
 }

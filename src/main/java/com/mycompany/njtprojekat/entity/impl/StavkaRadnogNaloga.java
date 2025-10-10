@@ -15,28 +15,28 @@ public class StavkaRadnogNaloga implements MyEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer rb;
-    @ManyToOne
+    @Column(nullable = false)
+    private int kolicina;
+    @Column(nullable = false)
+    private double cenaPoJedinici;
+    @Column(nullable = false)
+    private double ukupnaCena;
+    @Column(nullable = false)
+    private String opisZadatka;
+    
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "radninalog", nullable = false)
     private RadniNalog radniNalog;
-    private Integer kolicina;
-    private double cenaPoJedinici;
-    private double ukupnaCena;
-    private String opisZadatka;
-    @ManyToOne
+    
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "usluga", nullable = false)
     private Usluga usluga;
 
     public StavkaRadnogNaloga() {
     }
-
-    public StavkaRadnogNaloga(Integer rb, RadniNalog radniNalog, Integer kolicina, double cenaPoJedinici, double ukupnaCena, String opisZadatka,Usluga usluga) {
+    
+    public StavkaRadnogNaloga(Integer rb) {
         this.rb = rb;
-        this.radniNalog = radniNalog;
-        this.kolicina = kolicina;
-        this.cenaPoJedinici = cenaPoJedinici;
-        this.ukupnaCena = ukupnaCena;
-        this.opisZadatka=opisZadatka;
-        this.usluga = usluga;
     }
 
     public Integer getRb() {
@@ -47,19 +47,11 @@ public class StavkaRadnogNaloga implements MyEntity{
         this.rb = rb;
     }
 
-    public RadniNalog getRadniNalog() {
-        return radniNalog;
-    }
-
-    public void setRadniNalog(RadniNalog radniNalog) {
-        this.radniNalog = radniNalog;
-    }
-
-    public Integer getKolicina() {
+    public int getKolicina() {
         return kolicina;
     }
 
-    public void setKolicina(Integer kolicina) {
+    public void setKolicina(int kolicina) {
         this.kolicina = kolicina;
     }
 
@@ -79,6 +71,22 @@ public class StavkaRadnogNaloga implements MyEntity{
         this.ukupnaCena = ukupnaCena;
     }
 
+    public String getOpisZadatka() {
+        return opisZadatka;
+    }
+
+    public void setOpisZadatka(String opisZadatka) {
+        this.opisZadatka = opisZadatka;
+    }
+
+    public RadniNalog getRadniNalog() {
+        return radniNalog;
+    }
+
+    public void setRadniNalog(RadniNalog radniNalog) {
+        this.radniNalog = radniNalog;
+    }
+
     public Usluga getUsluga() {
         return usluga;
     }
@@ -87,12 +95,6 @@ public class StavkaRadnogNaloga implements MyEntity{
         this.usluga = usluga;
     }
 
-    public String getOpisZadatka() {
-        return opisZadatka;
-    }
-
-    public void setOpisZadatka(String opisZadatka) {
-        this.opisZadatka = opisZadatka;
-    }
+    
     
 }

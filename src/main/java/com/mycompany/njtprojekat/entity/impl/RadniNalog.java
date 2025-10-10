@@ -7,6 +7,7 @@ package com.mycompany.njtprojekat.entity.impl;
 import com.mycompany.njtprojekat.entity.MyEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,29 +19,41 @@ public class RadniNalog implements MyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idRadniNalog;
-    private Date datumOtvaranja;
-    private Date datumZatvaranja;
+    @Column(nullable = false)
+    private LocalDate datumOtvaranja;
+    @Column
+    private LocalDate datumZatvaranja;
+    @Column(nullable = false)
     private String opisKvara;
+    @Column(nullable = false)
     private String status;
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "mehanicar", nullable = false)
     private Mehanicar mehanicar;
-    @OneToMany(mappedBy = "radniNalog", cascade = CascadeType.ALL)
-    private List<StavkaRadnogNaloga> stavke;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "vozilo", nullable = false)
+    private Vozilo vozilo;
+    @OneToMany(mappedBy = "radniNalog", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StavkaRadnogNaloga> stavke = new ArrayList<>();
 
     public RadniNalog() {
         stavke = new ArrayList<>();
     }
+    public RadniNalog(Integer idRadniNalog) {
+        this.idRadniNalog = idRadniNalog;
+    }
 
-    public RadniNalog(Integer idRadniNalog, Date datumOtvaranja, Date datumZatvaranja, String opisKvara, String status, Mehanicar mehanicar, List<StavkaRadnogNaloga> stavke) {
+    public RadniNalog(Integer idRadniNalog, LocalDate datumOtvaranja, LocalDate datumZatvaranja, String opisKvara, String status, Mehanicar mehanicar, Vozilo vozilo) {
         this.idRadniNalog = idRadniNalog;
         this.datumOtvaranja = datumOtvaranja;
         this.datumZatvaranja = datumZatvaranja;
         this.opisKvara = opisKvara;
         this.status = status;
         this.mehanicar = mehanicar;
-        this.stavke = stavke;
+        this.vozilo = vozilo;
     }
+
+    
 
     
 
@@ -52,19 +65,19 @@ public class RadniNalog implements MyEntity {
         this.idRadniNalog = idRadniNalog;
     }
 
-    public Date getDatumOtvaranja() {
+    public LocalDate getDatumOtvaranja() {
         return datumOtvaranja;
     }
 
-    public void setDatumOtvaranja(Date datumOtvaranja) {
+    public void setDatumOtvaranja(LocalDate datumOtvaranja) {
         this.datumOtvaranja = datumOtvaranja;
     }
 
-    public Date getDatumZatvaranja() {
+    public LocalDate getDatumZatvaranja() {
         return datumZatvaranja;
     }
 
-    public void setDatumZatvaranja(Date datumZatvaranja) {
+    public void setDatumZatvaranja(LocalDate datumZatvaranja) {
         this.datumZatvaranja = datumZatvaranja;
     }
 
@@ -99,5 +112,25 @@ public class RadniNalog implements MyEntity {
     public void setStavke(List<StavkaRadnogNaloga> stavke) {
         this.stavke = stavke;
     }
+
+    public void addItem(StavkaRadnogNaloga stavka) {
+        stavka.setRadniNalog(this);
+        this.stavke.add(stavka);
+        
+    }
+
+    public void removeItem(StavkaRadnogNaloga stavka) {
+        stavka.setRadniNalog(null);
+        this.stavke.remove(stavka);
+    }
+
+    public Vozilo getVozilo() {
+        return vozilo;
+    }
+
+    public void setVozilo(Vozilo vozilo) {
+        this.vozilo = vozilo;
+    }
     
+
 }

@@ -15,42 +15,35 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Transactional
 public class RadniNalogRepository implements MyAppRepository<RadniNalog, Integer>{
     @PersistenceContext
-    EntityManager entityManager;
+    EntityManager em;
     
     @Override
     public List<RadniNalog> findAll() {
-        return entityManager.createQuery("Select rn from RadniNalog rn", RadniNalog.class).getResultList();
+        return em.createQuery("SELECT r FROM RadniNalog r", RadniNalog.class).getResultList();
     }
 
     @Override
     public RadniNalog findById(Integer id) throws Exception {
-        RadniNalog radniNalog = entityManager.find(RadniNalog.class, id);
-        if(radniNalog==null){
-            throw new Exception("Radni nalog nije pronadjen!");
-        }
-        return radniNalog;
+        RadniNalog r = em.find(RadniNalog.class, id);
+        if (r == null) throw new Exception("RadniNalog nije pronađen: " + id);
+        return r;
     }
 
     @Override
     @Transactional
     public void save(RadniNalog entity) {
-        if(entity.getIdRadniNalog()==null){
-            entityManager.persist(entity);
-        }
-        else{
-            entityManager.merge(entity);
-        }
+        if (entity.getIdRadniNalog()== null) em.persist(entity);
+        else em.merge(entity);
     }
 
     @Override
     @Transactional
     public void deleteById(Integer id) {
-        RadniNalog radniNalog = entityManager.find(RadniNalog.class, id);
-        if(radniNalog!=null){
-            entityManager.remove(radniNalog);
-        }
+        RadniNalog r = em.find(RadniNalog.class, id);
+        if (r != null) em.remove(r);
     }
 
 }

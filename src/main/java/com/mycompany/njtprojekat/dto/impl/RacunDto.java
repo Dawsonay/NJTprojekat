@@ -6,44 +6,34 @@ package com.mycompany.njtprojekat.dto.impl;
 
 import com.mycompany.njtprojekat.dto.Dto;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class RacunDto implements Dto  {
+public class RacunDto implements Dto {
+
     private Integer idRacun;
-
-    @NotNull(message = "Datum računa je obavezan")
-    @PastOrPresent(message = "Datum računa ne može biti u budućnosti")
     private LocalDate datum;
-
-    @PositiveOrZero(message = "Ukupan iznos ne sme biti negativan")
     private double ukupanIznos;
-
-    @NotNull(message = "Račun mora imati mehaničara")
+    @NotNull(message = "mehanicar je obavezan")
     private Integer idMehanicar;
-
-    @NotNull(message = "Račun mora biti vezan za vozilo")
+    @NotNull(message = "vozilo je obavezno")
     private Integer idVozilo;
-
-//    @Valid
-//    @NotNull(message = "Račun mora imati stavke")
-//    @Size(min = 1, message = "Račun mora imati bar jednu stavku")
-    private List<StavkaRacunaDto> stavke = new ArrayList<>();
+    @Valid
+    @NotEmpty(message = "racun mora imati bar jednu stavku")
+    private List<StavkaRacunaDto> stavke;
 
     public RacunDto() {
     }
 
-    public RacunDto(Integer idRacun, LocalDate datum, double ukupanIznos,
-                    Integer idMehanicar, Integer idVozilo, List<StavkaRacunaDto> stavke) {
+    public RacunDto(Integer idRacun, LocalDate datum, double ukupanIznos, Integer idMehanicar, Integer idVozilo, List<StavkaRacunaDto> stavke) {
         this.idRacun = idRacun;
         this.datum = datum;
         this.ukupanIznos = ukupanIznos;
         this.idMehanicar = idMehanicar;
         this.idVozilo = idVozilo;
-        this.stavke = stavke != null ? stavke : new ArrayList<>();
+        this.stavke = stavke;
     }
 
     public Integer getIdRacun() {
@@ -91,6 +81,8 @@ public class RacunDto implements Dto  {
     }
 
     public void setStavke(List<StavkaRacunaDto> stavke) {
-        this.stavke = stavke != null ? stavke : new ArrayList<>();
+        this.stavke = stavke;
     }
+
+    
 }

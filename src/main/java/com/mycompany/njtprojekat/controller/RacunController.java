@@ -1,108 +1,72 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.njtprojekat.controller;
 
 import com.mycompany.njtprojekat.dto.impl.RacunDto;
 import com.mycompany.njtprojekat.servis.RacunServis;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/racun")
+@Tag(name = "Racun")
 public class RacunController {
 
-   private final RacunServis servis;
+    private final RacunServis service;
 
-    public RacunController(RacunServis servis) {
-        this.servis = servis;
+    @Autowired
+    public RacunController(RacunServis racunServis) {
+        this.service = racunServis;
     }
 
     @GetMapping
-    @Operation(summary = "Retrieve all Racun entities")
-    @ApiResponse(responseCode = "200", content = {
-        @Content(schema = @Schema(implementation = RacunDto.class), mediaType = "application/json")
-    })
     public ResponseEntity<List<RacunDto>> getAll() {
-        return ResponseEntity.ok(servis.findAll());
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Retrieve a Racun by its ID")
-    public ResponseEntity<RacunDto> getById(
-            @NotNull(message = "ID ne sme biti null")
-            @PathVariable Integer id
-    ) {
+    public ResponseEntity<RacunDto> getById(@PathVariable Integer id) {
         try {
-            RacunDto racun = servis.findById(id);
-            return ResponseEntity.ok(racun);
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Racun sa ID " + id + " nije pronadjen");
+            return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
+    // POST - novi račun sa stavkama
     @PostMapping
-    @Operation(summary = "Create a new Racun entity")
-    @ApiResponse(responseCode = "201", description = "Racun successfully created",
-            content = {@Content(schema = @Schema(implementation = RacunDto.class), mediaType = "application/json")})
-    @ApiResponse(responseCode = "400", description = "Invalid input data")
-    public ResponseEntity<RacunDto> addRacun(@Valid @RequestBody RacunDto racunDto) {
+    @Operation(summary = "Kreiraj racun sa svim stavkama u jednoj transakciji")
+    public ResponseEntity<RacunDto> create(@Valid @RequestBody @NotNull RacunDto dto) {
         try {
-            RacunDto saved = servis.create(racunDto);
+            RacunDto saved = service.create(dto);
             return new ResponseEntity<>(saved, HttpStatus.CREATED);
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greška pri kreiranju racuna: " + ex.getMessage());
-        }
-    }
-
-    @PutMapping("/{id}")
-    @Operation(summary = "Update an existing Racun")
-    @ApiResponse(responseCode = "200", content = {
-        @Content(schema = @Schema(implementation = RacunDto.class), mediaType = "application/json")
-    })
-    @ApiResponse(responseCode = "404", description = "Racun not found")
-    public ResponseEntity<RacunDto> update(
-            @PathVariable Integer id,
-            @Valid @RequestBody RacunDto racunDto
-    ) {
-        try {
-            racunDto.setIdRacun(id);
-            RacunDto updated = servis.update(racunDto);
-            return ResponseEntity.ok(updated);
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Racun sa ID " + id + " nije pronadjen za update");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a Racun by its ID")
-    @ApiResponse(responseCode = "200", description = "Racun successfully deleted")
-    @ApiResponse(responseCode = "404", description = "Racun not found")
     public ResponseEntity<String> delete(@PathVariable Integer id) {
+        service.deleteById(id);
+        return new ResponseEntity<>("Racun obrisan", HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Ažuriraj postojeći račun (i stavke)")
+    public ResponseEntity<RacunDto> update(@PathVariable Integer id, @Valid @RequestBody @NotNull RacunDto dto) {
         try {
-            servis.deleteById(id);
-            return ResponseEntity.ok("Racun sa ID " + id + " je uspesno obrisan");
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Racun sa ID " + id + " nije pronadjen");
+            RacunDto updated = service.update(id, dto);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 }

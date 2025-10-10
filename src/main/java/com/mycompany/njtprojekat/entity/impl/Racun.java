@@ -1,17 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.njtprojekat.entity.impl;
 
 import com.mycompany.njtprojekat.entity.MyEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,32 +13,38 @@ public class Racun implements MyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idRacun;
+
+    @Column(nullable = false)
     private LocalDate datum;
-    private double ukupanIznos;
-    @ManyToOne
+
+    @Column(name = "ukupan_iznos")
+    private Double ukupanIznos;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "mehanicar", nullable = false)
     private Mehanicar mehanicar;
-    @ManyToOne
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "vozilo", nullable = false)
     private Vozilo vozilo;
+
+    // Dvosmerna veza sa stavkama
     @OneToMany(mappedBy = "racun", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StavkaRacuna> stavke;
+    private List<StavkaRacuna> stavke = new ArrayList<>();
 
     public Racun() {
-        stavke = new ArrayList<>();
     }
 
-    public Racun(Integer idRacun, LocalDate datum, double ukupanIznos, Mehanicar mehanicar, Vozilo vozilo) {
+    public Racun(Integer idRacun) {
+        this.idRacun = idRacun;
+    }
+
+    public Racun(Integer idRacun, LocalDate datum, Double ukupanIznos, Mehanicar mehanicar, Vozilo vozilo) {
         this.idRacun = idRacun;
         this.datum = datum;
         this.ukupanIznos = ukupanIznos;
         this.mehanicar = mehanicar;
         this.vozilo = vozilo;
-        this.stavke = new ArrayList<>();
-    }
-
-    public Racun(Integer idRacun) {
-        this.idRacun = idRacun;
     }
 
     public Integer getIdRacun() {
@@ -67,11 +63,11 @@ public class Racun implements MyEntity {
         this.datum = datum;
     }
 
-    public double getUkupanIznos() {
+    public Double getUkupanIznos() {
         return ukupanIznos;
     }
 
-    public void setUkupanIznos(double ukupanIznos) {
+    public void setUkupanIznos(Double ukupanIznos) {
         this.ukupanIznos = ukupanIznos;
     }
 
@@ -99,4 +95,15 @@ public class Racun implements MyEntity {
         this.stavke = stavke;
     }
     
+    
+    public void addItem(StavkaRacuna stavka) {
+        stavka.setRacun(this);
+        this.stavke.add(stavka);
+        
+    }
+
+    public void removeItem(StavkaRacuna stavka) {
+        stavka.setRacun(null);
+        this.stavke.remove(stavka);
+    }
 }
