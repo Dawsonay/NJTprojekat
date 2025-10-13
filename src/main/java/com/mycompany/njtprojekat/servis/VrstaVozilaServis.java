@@ -5,13 +5,9 @@
 
 package com.mycompany.njtprojekat.servis;
 
-import com.mycompany.njtprojekat.dto.impl.VoziloDto;
 import com.mycompany.njtprojekat.dto.impl.VrstaVozilaDto;
-import com.mycompany.njtprojekat.entity.impl.Vozilo;
 import com.mycompany.njtprojekat.entity.impl.VrstaVozila;
-import com.mycompany.njtprojekat.mapper.impl.VoziloMapper;
 import com.mycompany.njtprojekat.mapper.impl.VrstaVozilaMapper;
-import com.mycompany.njtprojekat.repository.impl.VoziloRepository;
 import com.mycompany.njtprojekat.repository.impl.VrstaVozilaRepository;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -5,16 +5,10 @@
 package com.mycompany.njtprojekat.dto.impl;
 
 import com.mycompany.njtprojekat.dto.Dto;
-import com.mycompany.njtprojekat.entity.impl.*;
-import com.mycompany.njtprojekat.entity.MyEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class RadniNalogDto implements Dto {

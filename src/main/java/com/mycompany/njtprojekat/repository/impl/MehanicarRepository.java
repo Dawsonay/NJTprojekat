@@ -24,7 +24,7 @@ public class MehanicarRepository implements MyAppRepository<Mehanicar, Integer> 
     public Mehanicar findById(Integer id) throws Exception {
         Mehanicar mehanicar = entityManager.find(Mehanicar.class, id);
         if (mehanicar == null) {
-            throw new Exception("Mehaničar nije pronađen!");
+            throw new Exception("Mehanicar nije pronadjen!");
         }
         return mehanicar;
     }

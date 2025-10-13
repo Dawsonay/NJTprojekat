@@ -41,7 +41,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         try {
-            // 🔹 Autentifikacija korisnika
+            
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getUsername(),
@@ -49,24 +49,21 @@ public class AuthController {
                     )
             );
 
-            // 🔹 Ako je uspešno, uzmi UserDetails i generiši JWT
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String jwt = jwtUtil.generateToken(userDetails);
 
-            // 🔹 Pronađi mehaničara u bazi po username-u
             Mehanicar mehanicar = mehanicarService.findByUsername(userDetails.getUsername());
             MehanicarDto mehanicarDto = mehanicarMapper.toDto(mehanicar);
 
-            // 🔹 Vrati token + podatke o korisniku (DTO)
             return ResponseEntity.ok(new JwtResponse(jwt, mehanicarDto));
 
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("❌ Pogrešno korisničko ime ili lozinka.");
+                    .body("Pogresno korisnicko ime ili lozinka.");
         } catch (Exception ex) {
             ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("⚠️ Greška prilikom prijave: " + ex.getMessage());
+                    .body("Greska prilikom prijave: " + ex.getMessage());
         }
     }
 }

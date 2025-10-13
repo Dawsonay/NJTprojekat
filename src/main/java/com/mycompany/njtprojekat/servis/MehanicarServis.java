@@ -30,7 +30,6 @@ public class MehanicarServis {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // 🔹 Vrati sve mehaničare kao DTO
     public List<MehanicarDto> findAll() {
         return mehanicarRepository.findAll()
                 .stream()
@@ -38,18 +37,16 @@ public class MehanicarServis {
                 .collect(Collectors.toList());
     }
 
-    // 🔹 Nađi mehaničara po ID-u
     public MehanicarDto findById(Integer id) throws Exception {
         Mehanicar mehanicar = mehanicarRepository.findById(id);
         if (mehanicar == null) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Mehaničar sa ID " + id + " nije pronađen."
+                    HttpStatus.NOT_FOUND, "Mehanicar sa ID " + id + " nije pronadjen."
             );
         }
         return mehanicarMapper.toDto(mehanicar);
     }
 
-    // 🔹 Kreiraj novog mehaničara
     public MehanicarDto create(MehanicarDto mehanicarDto) {
         Mehanicar mehanicar = mehanicarMapper.toEntity(mehanicarDto);
         mehanicar.setPassword(passwordEncoder.encode(mehanicar.getPassword()));
@@ -57,18 +54,16 @@ public class MehanicarServis {
         return mehanicarMapper.toDto(mehanicar);
     }
 
-    // 🔹 Izbriši mehaničara po ID-u
     public void deleteById(Integer id) {
         mehanicarRepository.deleteById(id);
     }
 
-    // 🔹 Ažuriraj mehaničara
     public MehanicarDto update(MehanicarDto mehanicarDto) throws Exception {
         Mehanicar existing = mehanicarRepository.findById(mehanicarDto.getIdMehanicar());
         if (existing == null) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Mehaničar sa ID " + mehanicarDto.getIdMehanicar() + " nije pronađen."
+                    "Mehanicar sa ID " + mehanicarDto.getIdMehanicar() + " nije pronadjen."
             );
         }
 
@@ -76,7 +71,6 @@ public class MehanicarServis {
         existing.setPrezime(mehanicarDto.getPrezime());
         existing.setUsername(mehanicarDto.getUsername());
 
-        // Ako je poslat novi password
         if (mehanicarDto.getPassword() != null && !mehanicarDto.getPassword().isBlank()) {
             existing.setPassword(passwordEncoder.encode(mehanicarDto.getPassword()));
         }
@@ -85,13 +79,12 @@ public class MehanicarServis {
         return mehanicarMapper.toDto(existing);
     }
 
-    // ✅ IMPLEMENTACIJA METODE KOJA NEDOSTAJE
     public Mehanicar findByUsername(String username) {
         Mehanicar mehanicar = mehanicarRepository.findByUsername(username);
         if (mehanicar == null) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Mehaničar sa korisničkim imenom '" + username + "' nije pronađen."
+                    "Mehanicar sa korisnickim imenom '" + username + "' nije pronadjen."
             );
         }
         return mehanicar;

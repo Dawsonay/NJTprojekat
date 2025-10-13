@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-// @OneToMany(mappedBy="restaurant", cascade=CascadeType.ALL)
+
 @Entity
 @Table(name = "mehanicar",
         uniqueConstraints = {
@@ -89,22 +89,22 @@ public class Mehanicar implements MyEntity, UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // Uvek true, osim ako nemate logiku za isticanje naloga
+        return true; 
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // Uvek true, osim ako nemate logiku za zaključavanje naloga
+        return true; 
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // Uvek true, osim ako nemate logiku za isticanje šifre
+        return true; 
     }
 
     @Override
     public boolean isEnabled() {
-        return true; // Uvek true, osim ako nemate logiku za privremeno gašenje naloga
+        return true; 
     }
 
 }

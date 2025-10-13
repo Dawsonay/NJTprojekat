@@ -52,7 +52,6 @@ public class RadniNalogController {
         }
     }
 
-    // POST - novi račun sa stavkama
     @PostMapping
     @Operation(summary = "Kreiraj radni nalog sa svim stavkama u jednoj transakciji")
     public ResponseEntity<RadniNalogDto> create(@Valid @RequestBody @NotNull RadniNalogDto dto) {
@@ -71,7 +70,7 @@ public class RadniNalogController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Ažuriraj postojeći radni nalog (i stavke)")
+    @Operation(summary = "Azuriraj postojeći radni nalog (i stavke)")
     public ResponseEntity<RadniNalogDto> update(@PathVariable Integer id, @Valid @RequestBody @NotNull RadniNalogDto dto) {
         try {
             RadniNalogDto updated = service.update(id, dto);

@@ -5,7 +5,6 @@
 
 package com.mycompany.njtprojekat.repository.impl;
 
-import com.mycompany.njtprojekat.entity.impl.Racun;
 import com.mycompany.njtprojekat.entity.impl.RadniNalog;
 import com.mycompany.njtprojekat.repository.MyAppRepository;
 import jakarta.persistence.EntityManager;

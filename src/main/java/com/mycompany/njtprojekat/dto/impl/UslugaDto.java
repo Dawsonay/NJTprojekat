@@ -6,9 +6,6 @@
 package com.mycompany.njtprojekat.dto.impl;
 
 import com.mycompany.njtprojekat.dto.Dto;
-import com.mycompany.njtprojekat.entity.impl.*;
-import jakarta.persistence.*;
-import com.mycompany.njtprojekat.entity.MyEntity;
 import jakarta.validation.constraints.*;
 
 
@@ -23,7 +20,7 @@ public class UslugaDto implements Dto{
     @Size(min = 5, max = 500, message = "Opis usluge mora imati između 5 i 500 karaktera")
     private String opis;
     
-    @Positive(message = "Cena usluge mora biti veća od 0")
+    @Positive(message = "Cena usluge mora biti veca od 0")
     private double cena;
 
     public UslugaDto() {

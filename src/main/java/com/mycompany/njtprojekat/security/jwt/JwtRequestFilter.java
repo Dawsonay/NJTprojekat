@@ -39,7 +39,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtil.extractUsername(jwtToken);
             } catch (Exception e) {
-                System.out.println("❌ Nevažeći JWT token: " + e.getMessage());
+                System.out.println("Nevazeci JWT token: " + e.getMessage());
             }
         }
 

@@ -4,9 +4,7 @@
  */
 package com.mycompany.njtprojekat.mapper.impl;
 
-import com.mycompany.njtprojekat.dto.Dto;
 import com.mycompany.njtprojekat.dto.impl.StavkaRadnogNalogaDto;
-import com.mycompany.njtprojekat.entity.impl.RadniNalog;
 import com.mycompany.njtprojekat.entity.impl.StavkaRadnogNaloga;
 import com.mycompany.njtprojekat.entity.impl.Usluga;
 import com.mycompany.njtprojekat.mapper.DtoEntityMapper;

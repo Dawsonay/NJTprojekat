@@ -6,9 +6,6 @@
 package com.mycompany.njtprojekat.dto.impl;
 
 import com.mycompany.njtprojekat.dto.Dto;
-import com.mycompany.njtprojekat.entity.impl.*;
-import jakarta.persistence.*;
-import com.mycompany.njtprojekat.entity.MyEntity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
@@ -16,12 +13,12 @@ import jakarta.validation.constraints.*;
 public class VoziloDto implements Dto{
     private Integer idVozilo;
     
-    @NotBlank(message = "Broj šasije je obavezan")
-    @Size(min = 5, max = 50, message = "Broj šasije mora imati između 5 i 50 karaktera")
+    @NotBlank(message = "Broj sasije je obavezan")
+    @Size(min = 5, max = 50, message = "Broj sasije mora imati između 5 i 50 karaktera")
     private String brojSasije;
     
     @NotBlank(message = "Model vozila je obavezan")
-    @Size(min = 2, max = 50, message = "Model mora imati između 2 i 50 karaktera")
+    @Size(min = 2, max = 50, message = "Model mora imati izmedju 2 i 50 karaktera")
     private String model;
     
     @NotBlank(message = "Registarski broj je obavezan")

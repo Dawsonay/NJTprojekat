@@ -28,7 +28,7 @@ public class Racun implements MyEntity {
     @JoinColumn(name = "vozilo", nullable = false)
     private Vozilo vozilo;
 
-    // Dvosmerna veza sa stavkama
+    
     @OneToMany(mappedBy = "racun", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StavkaRacuna> stavke = new ArrayList<>();
 

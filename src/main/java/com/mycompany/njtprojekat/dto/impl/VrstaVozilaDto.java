@@ -6,9 +6,6 @@
 package com.mycompany.njtprojekat.dto.impl;
 
 import com.mycompany.njtprojekat.dto.Dto;
-import com.mycompany.njtprojekat.entity.impl.*;
-import jakarta.persistence.*;
-import com.mycompany.njtprojekat.entity.MyEntity;
 import jakarta.validation.constraints.*;
 
 

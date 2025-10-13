@@ -25,7 +25,7 @@ public class RacunRepository implements MyAppRepository<Racun, Integer> {
     @Override
     public Racun findById(Integer id) throws Exception {
         Racun r = em.find(Racun.class, id);
-        if (r == null) throw new Exception("Racun nije pronađen: " + id);
+        if (r == null) throw new Exception("Racun nije pronadjen: " + id);
         return r;
     }
 

@@ -6,11 +6,6 @@
 package com.mycompany.njtprojekat.dto.impl;
 
 import com.mycompany.njtprojekat.dto.Dto;
-import com.mycompany.njtprojekat.entity.impl.*;
-import com.mycompany.njtprojekat.entity.MyEntity;
-import jakarta.persistence.*;
-import jakarta.persistence.Table;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 
@@ -18,17 +13,17 @@ import jakarta.validation.constraints.*;
 public class StavkaRadnogNalogaDto implements Dto{
     private Integer rb;
     
-    @Positive(message = "Količina mora biti veća od 0")
+    @Positive(message = "Kolicina mora biti veca od 0")
     private int kolicina;
     
-    @Positive(message = "Cena po jedinici mora biti veća od 0")
+    @Positive(message = "Cena po jedinici mora biti veca od 0")
     private double cenaPoJedinici;
     
     @PositiveOrZero(message = "Ukupna cena ne sme biti negativna")
     private double ukupnaCena;
     
     @NotBlank(message = "Opis zadatka je obavezan")
-    @Size(min = 5, max = 300, message = "Opis zadatka mora imati između 5 i 300 karaktera")
+    @Size(min = 5, max = 300, message = "Opis zadatka mora imati izmedju 5 i 300 karaktera")
     private String opisZadatka;
     
     @NotNull(message = "usluga je obavezna")

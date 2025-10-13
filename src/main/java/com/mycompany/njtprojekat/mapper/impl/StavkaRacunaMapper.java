@@ -1,7 +1,6 @@
 package com.mycompany.njtprojekat.mapper.impl;
 
 import com.mycompany.njtprojekat.dto.impl.StavkaRacunaDto;
-import com.mycompany.njtprojekat.entity.impl.Racun;
 import com.mycompany.njtprojekat.entity.impl.StavkaRacuna;
 import com.mycompany.njtprojekat.entity.impl.Usluga;
 import com.mycompany.njtprojekat.mapper.DtoEntityMapper;

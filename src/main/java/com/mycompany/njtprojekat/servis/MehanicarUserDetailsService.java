@@ -23,7 +23,7 @@ public class MehanicarUserDetailsService implements UserDetailsService {
         Mehanicar mehanicar = mehanicarRepository.findByUsername(username);
 
         if (mehanicar == null) {
-            throw new UsernameNotFoundException("Mehaničar sa korisničkim imenom " + username + " nije pronađen.");
+            throw new UsernameNotFoundException("Mehanicar sa korisnickim imenom " + username + " nije pronadjen.");
         }
 
         return new org.springframework.security.core.userdetails.User(

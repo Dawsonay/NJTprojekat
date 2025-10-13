@@ -69,13 +69,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        // 🔓 Dozvoli login/register bez tokena
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // 🔓 Dozvoli Swagger i dokumentaciju
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
-                        // 🔒 Sve ostalo — samo ako je token validan
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

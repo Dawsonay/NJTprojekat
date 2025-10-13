@@ -5,7 +5,6 @@
 
 package com.mycompany.njtprojekat.repository.impl;
 
-import com.mycompany.njtprojekat.entity.impl.StavkaRacuna;
 import com.mycompany.njtprojekat.entity.impl.StavkaRadnogNaloga;
 import com.mycompany.njtprojekat.repository.MyAppRepository;
 import jakarta.persistence.EntityManager;
@@ -51,7 +50,7 @@ public class StavkaRadnogNalogaRepository implements MyAppRepository<StavkaRadno
         }
     }
     
-    // dodatne metode koje servisu trebaju:
+    
     public List<StavkaRadnogNaloga> findByRadniNalog(Integer id) {
         return em.createQuery("SELECT s FROM StavkaRadnogNaloga s WHERE s.idRadniNalog = :id", StavkaRadnogNaloga.class)
                 .setParameter("id", id)

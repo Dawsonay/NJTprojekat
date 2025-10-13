@@ -41,7 +41,6 @@ public class RacunController {
         }
     }
 
-    // POST - novi račun sa stavkama
     @PostMapping
     @Operation(summary = "Kreiraj racun sa svim stavkama u jednoj transakciji")
     public ResponseEntity<RacunDto> create(@Valid @RequestBody @NotNull RacunDto dto) {
@@ -60,7 +59,7 @@ public class RacunController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Ažuriraj postojeći račun (i stavke)")
+    @Operation(summary = "Azuriraj postojeci racun (i stavke)")
     public ResponseEntity<RacunDto> update(@PathVariable Integer id, @Valid @RequestBody @NotNull RacunDto dto) {
         try {
             RacunDto updated = service.update(id, dto);

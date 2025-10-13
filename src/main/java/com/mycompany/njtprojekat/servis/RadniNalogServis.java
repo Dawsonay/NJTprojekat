@@ -4,20 +4,14 @@
  */
 package com.mycompany.njtprojekat.servis;
 
-import com.mycompany.njtprojekat.dto.impl.RacunDto;
 import com.mycompany.njtprojekat.dto.impl.RadniNalogDto;
-import com.mycompany.njtprojekat.dto.impl.StavkaRacunaDto;
 import com.mycompany.njtprojekat.dto.impl.StavkaRadnogNalogaDto;
 import com.mycompany.njtprojekat.entity.impl.Mehanicar;
-import com.mycompany.njtprojekat.entity.impl.Racun;
 import com.mycompany.njtprojekat.entity.impl.RadniNalog;
-import com.mycompany.njtprojekat.entity.impl.StavkaRacuna;
 import com.mycompany.njtprojekat.entity.impl.StavkaRadnogNaloga;
 import com.mycompany.njtprojekat.entity.impl.Usluga;
 import com.mycompany.njtprojekat.entity.impl.Vozilo;
-import com.mycompany.njtprojekat.mapper.impl.RacunMapper;
 import com.mycompany.njtprojekat.mapper.impl.RadniNalogMapper;
-import com.mycompany.njtprojekat.repository.impl.RacunRepository;
 import com.mycompany.njtprojekat.repository.impl.RadniNalogRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -88,7 +82,6 @@ public class RadniNalogServis {
 
     }
 
-    // 🔹 Brisanje računa
     @Transactional
     public void deleteById(Integer id) {
         orders.deleteById(id);
@@ -101,25 +94,20 @@ public class RadniNalogServis {
             throw new Exception("Radni nalog ne postoji!");
         }
 
-        // 🔹 Ažuriraj osnovna polja
         existing.setDatumZatvaranja(dto.getDatumZatvaranja());
         existing.setStatus(dto.getStatus());
         existing.setOpisKvara(dto.getOpisKvara());
         existing.setVozilo(em.getReference(Vozilo.class, dto.getIdVozilo()));
 
-        // 🔹 Mapa postojećih stavki po rb
         List<StavkaRadnogNaloga> postojece = existing.getStavke();
         java.util.Map<Integer, StavkaRadnogNaloga> mapaPostojecih = postojece.stream()
                 .collect(Collectors.toMap(StavkaRadnogNaloga::getRb, s -> s));
         
-        // 🔹 Nova lista stavki (posle ažuriranja)
         List<StavkaRadnogNaloga> noveStavke = dto.getStavke().stream().map(stavkaDto -> {
             StavkaRadnogNaloga s;
             if (stavkaDto.getRb() != null && mapaPostojecih.containsKey(stavkaDto.getRb())) {
-                // već postoji → ažuriraj postojeću
                 s = mapaPostojecih.get(stavkaDto.getRb());
             } else {
-                // nova stavka
                 s = new StavkaRadnogNaloga();
                 s.setRadniNalog(existing);
             }
@@ -132,7 +120,6 @@ public class RadniNalogServis {
             return s;
         }).collect(Collectors.toList());
 
-        // 🔹 Obriši stavke koje više nisu prisutne u DTO
         List<Integer> noviRb = dto.getStavke().stream()
                 .map(StavkaRadnogNalogaDto::getRb)
                 .filter(java.util.Objects::nonNull)
@@ -140,7 +127,6 @@ public class RadniNalogServis {
 
         postojece.removeIf(stara -> !noviRb.contains(stara.getRb()));
 
-        // 🔹 Dodaj i ažurirane stavke
         existing.getStavke().clear();
         existing.getStavke().addAll(noveStavke);
 

@@ -45,9 +45,8 @@ public class MehanicarController {
         this.mehanicarUserDetailsService = mehanicarUserDetailsService;
     }
 
-    // =================== GET ALL ===================
     @GetMapping
-    @Operation(summary = "Prikazuje sve mehaničare")
+    @Operation(summary = "Prikazuje sve mehanicare")
     @ApiResponse(responseCode = "200", content = {
         @Content(schema = @Schema(implementation = MehanicarDto.class), mediaType = "application/json")
     })
@@ -55,7 +54,6 @@ public class MehanicarController {
         return ResponseEntity.ok(mehanicarServis.findAll());
     }
 
-    // =================== GET BY ID ===================
     @GetMapping("/{id}")
     public ResponseEntity<MehanicarDto> getById(
             @NotNull(message = "ID ne sme biti null") @PathVariable Integer id
@@ -63,38 +61,35 @@ public class MehanicarController {
         try {
             return ResponseEntity.ok(mehanicarServis.findById(id));
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Mehaničar nije pronađen.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Mehanicar nije pronadjen.");
         }
     }
 
-    // =================== CREATE ===================
     @PostMapping
-    @Operation(summary = "Kreira novog mehaničara")
-    @ApiResponse(responseCode = "201", description = "Mehaničar uspešno kreiran",
+    @Operation(summary = "Kreira novog mehanicara")
+    @ApiResponse(responseCode = "201", description = "Mehanicar uspesno kreiran",
             content = @Content(schema = @Schema(implementation = MehanicarDto.class)))
     public ResponseEntity<MehanicarDto> addMehanicar(@Valid @RequestBody MehanicarDto mehanicarDto) {
         try {
             MehanicarDto saved = mehanicarServis.create(mehanicarDto);
             return new ResponseEntity<>(saved, HttpStatus.CREATED);
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greška pri kreiranju: " + ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greska pri kreiranju: " + ex.getMessage());
         }
     }
 
-    // =================== DELETE ===================
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id) {
         try {
             mehanicarServis.deleteById(id);
-            return ResponseEntity.ok("Mehaničar uspešno obrisan.");
+            return ResponseEntity.ok("Mehanicar uspesno obrisan.");
         } catch (Exception ex) {
-            return new ResponseEntity<>("Ne postoji mehaničar sa ID: " + id, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Ne postoji mehanicar sa ID: " + id, HttpStatus.NOT_FOUND);
         }
     }
 
-    // =================== UPDATE ===================
     @PutMapping("/{id}")
-    @Operation(summary = "Ažurira postojeću evidenciju mehaničara")
+    @Operation(summary = "Azurira postojecu evidenciju mehanicara")
     @ApiResponse(responseCode = "200", content = {
         @Content(schema = @Schema(implementation = MehanicarUpdateResponse.class), mediaType = "application/json")
     })
@@ -105,12 +100,10 @@ public class MehanicarController {
         try {
             mehanicarDto.setIdMehanicar(id);
 
-            // ✅ Ažuriraj mehaničara
             MehanicarDto updated = mehanicarServis.update(mehanicarDto);
 
             String token = null;
 
-            // ✅ Ako je poslat novi password, generiši novi token
             if (mehanicarDto.getPassword() != null && !mehanicarDto.getPassword().isBlank()) {
                 UserDetails userDetails = mehanicarUserDetailsService.loadUserByUsername(updated.getUsername());
                 token = jwtUtil.generateToken(userDetails);
@@ -120,10 +113,10 @@ public class MehanicarController {
             return ResponseEntity.ok(response);
 
         } catch (ResponseStatusException e) {
-            throw e; // proslijedi ako već ima status
+            throw e; 
         } catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Greška prilikom ažuriranja: " + ex.getMessage());
+                    "Greska prilikom azuriranja: " + ex.getMessage());
         }
     }
 }

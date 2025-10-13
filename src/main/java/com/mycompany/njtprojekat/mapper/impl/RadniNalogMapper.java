@@ -4,18 +4,13 @@
  */
 package com.mycompany.njtprojekat.mapper.impl;
 
-import com.mycompany.njtprojekat.dto.impl.RacunDto;
 import com.mycompany.njtprojekat.dto.impl.RadniNalogDto;
-import com.mycompany.njtprojekat.dto.impl.StavkaRadnogNalogaDto;
 import com.mycompany.njtprojekat.entity.impl.Mehanicar;
-import com.mycompany.njtprojekat.entity.impl.Racun;
 import com.mycompany.njtprojekat.entity.impl.RadniNalog;
-import com.mycompany.njtprojekat.entity.impl.StavkaRadnogNaloga;
 import com.mycompany.njtprojekat.entity.impl.Vozilo;
 import com.mycompany.njtprojekat.mapper.DtoEntityMapper;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

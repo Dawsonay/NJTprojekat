@@ -23,7 +23,7 @@ public class MehanicarDto implements Dto {
     @Size(min = 4, max = 20, message = "Korisnicko ime mora imati izmedju 4 i 20 karaktera")
     private String username;
 
-    // ⚙️ Više nije obavezno polje — može biti null ili prazan string ako se ne menja
+    
     @Size(min = 8, max = 100, message = "Lozinka mora imati najmanje 8 karaktera")
     private String password;
 

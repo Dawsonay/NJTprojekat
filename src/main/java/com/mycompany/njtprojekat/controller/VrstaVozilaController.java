@@ -74,7 +74,7 @@ public class VrstaVozilaController {
 
             return new ResponseEntity<>(saved, HttpStatus.CREATED);
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greška pri kreiranju vrsta vozila: " + ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Greska pri kreiranju vrsta vozila: " + ex.getMessage());
         }
     }
 

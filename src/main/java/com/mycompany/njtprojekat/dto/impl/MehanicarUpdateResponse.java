@@ -7,10 +7,10 @@ package com.mycompany.njtprojekat.dto.impl;
 
 import com.mycompany.njtprojekat.dto.Dto;
 
-// DTO koji vraćamo frontendu kada menjamo lozinku
+
 public class MehanicarUpdateResponse implements Dto {
     private MehanicarDto mehanicar;
-    private String token; // Novi JWT token (biće popunjen samo ako je menjana lozinka)
+    private String token; 
 
     public MehanicarUpdateResponse(MehanicarDto mehanicar, String token) {
         this.mehanicar = mehanicar;

@@ -3,7 +3,6 @@ package com.mycompany.njtprojekat.security.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import java.util.Date;
 import java.util.function.Function;
 import javax.crypto.spec.SecretKeySpec;
@@ -18,24 +17,21 @@ public class JwtUtil {
 
     private final Key key;
 
-    // 🔐 Učitava secret key iz application.properties
+    
     public JwtUtil(@Value("${app.jwt.secret}") String secret) {
         this.key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.getJcaName());
     }
 
     public static final long JWT_TOKEN_VALIDITY = 60 * 60 * 1000; // 1h
 
-    // ✅ Vraća username iz tokena
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // ✅ Vraća datum isteka
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    // ✅ Generalna metoda za čitanje claim-ova
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
@@ -54,7 +50,6 @@ public class JwtUtil {
         return expiration.before(new Date());
     }
 
-    // ✅ Generiše token bez role
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
@@ -64,7 +59,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // ✅ Provera da li je token validan
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));

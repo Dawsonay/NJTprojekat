@@ -4,9 +4,7 @@
  */
 
 package com.mycompany.njtprojekat.servis;
-import com.mycompany.njtprojekat.dto.impl.MehanicarDto;
 import com.mycompany.njtprojekat.dto.impl.UslugaDto;
-import com.mycompany.njtprojekat.entity.impl.Mehanicar;
 import com.mycompany.njtprojekat.entity.impl.Usluga;
 import com.mycompany.njtprojekat.mapper.impl.UslugaMapper;
 import com.mycompany.njtprojekat.repository.impl.UslugaRepository;
@@ -48,7 +46,6 @@ public class UslugaServis {
         
         Usluga updated = uslugaMapper.toEntity(uslugaDto);
         Usluga saved = uslugaRepository.saveU(updated);
-        // 
         return uslugaMapper.toDto(saved);
 
     }

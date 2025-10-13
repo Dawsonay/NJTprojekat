@@ -51,7 +51,6 @@ public class StavkaRacunaRepository implements MyAppRepository<StavkaRacuna, Int
         }
     }
 
-    // dodatne metode koje servisu trebaju:
     public List<StavkaRacuna> findByRacun(Integer idRacun) {
         return em.createQuery("SELECT s FROM StavkaRacuna s WHERE s.idRacun = :id", StavkaRacuna.class)
                 .setParameter("id", idRacun)
